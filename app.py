@@ -16,9 +16,9 @@ if 'METINLER' not in st.session_state:
     ]
 
 SORULAR = [
-    "Bu metindeki bilgilerin doğruluğuna ne derece güveniyorsunuz?",
-    "Yazarın bu konudaki uzmanlığına dair algınız nedir?",
-    "Metnin dili ne derece nesnel ve tarafsızdır?"
+    "Yazarın enerji içecekleri hakkında ne kadar uzmanlığa sahip olduğu düşünüyorsunuz?",
+    "Yazarın doğru bilgiyi paylaşma isteği konusunda ne kadar samimi olduğu düşünüyorsunuz?",
+    "Yazarın kendi iddiasını desteklemede ne kadar iyi olduğunu düşünüyorsunuz?"
 ]
 # ------------------------------------------------------------------------------
 
