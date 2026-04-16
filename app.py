@@ -126,48 +126,51 @@ if st.session_state.step == "GIRIS":
 
 # --- EKRAN 2: TEST SÜRECİ ---
 elif st.session_state.step == "TEST":
-    # --- JAVASCRIPT: HER SAYFA DEĞİŞİMİNDE EN ÜSTE ÇIKAR ---
+    # 1. Sayfanın en üstüne bir çapa (anchor) koyuyoruz
+    st.markdown("<div id='top'></div>", unsafe_allow_html=True)
+    
+    # 2. Daha kuvvetli bir JS komutu (Hem scrollTo hem scrollIntoView deniyoruz)
     components.html(
         """
         <script>
-            var body = window.parent.document.querySelector(".main");
-            body.scrollTo(0,0);
+            // Üstteki elementi bul ve oraya kaydır
+            var topElement = window.parent.document.getElementById('top');
+            if (topElement) {
+                topElement.scrollIntoView({behavior: 'auto'});
+            }
+            // Alternatif olarak ana pencereyi sıfırla
+            window.parent.window.scrollTo(0, 0);
         </script>
         """,
         height=0
     )
-
+    
     idx = st.session_state.current_text
     current_m = st.session_state.METINLER[idx]
     
     st.info(f"Katılımcı: **{st.session_state.user_name}** | İlerleme: **{idx + 1} / 4**")
     
-    # GELİŞMİŞ BROWSER GÖRÜNÜMÜ
+    # BROWSER GÖRÜNÜMÜ VE DİĞER KODLAR AYNI ŞEKİLDE DEVAM EDİYOR...
     st.markdown(f"""
     <div class="browser-window">
         <div class="browser-header-tabs">
-            <div class="window-dots">
-                <div class="dot dot-red"></div>
-                <div class="dot dot-yellow"></div>
-                <div class="dot dot-green"></div>
-            </div>
+            <div class="window-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
             <div class="active-tab">📄 {current_m['baslik']}</div>
         </div>
         <div class="browser-address-bar">
             <div class="nav-btn">←</div><div class="nav-btn">→</div><div class="nav-btn">↻</div>
-            <div class="url-box">
-                <span style="color:#1a73e8;">🔒</span> https://www.{current_m['url']}
-            </div>
+            <div class="url-box"><span style="color:#1a73e8;">🔒</span> https://www.{current_m['url']}</div>
             <div class="nav-btn">⋮</div>
         </div>
         <div class="browser-body">
-            <h1 style="margin-top:0; font-size:26px; color:#222;">{current_m['baslik']}</h1>
+            <h1 style="margin-top:0; font-size:26px;">{current_m['baslik']}</h1>
             <hr style="border:0.5px solid #eee;">
             <p>{current_m['icerik']}</p>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
+    # ... (Geri kalan radyo düğmeleri ve butonlar aynı kalsın)
     # SORULAR (Likert 1-6)
     st.write("### Değerlendirme")
     st.caption("1 = Hiç katılmıyorum / Çok kötü, 6 = Tamamen katılıyorum / Çok iyi")
