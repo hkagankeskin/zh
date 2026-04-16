@@ -39,7 +39,7 @@ if 'answers' not in st.session_state: st.session_state.answers = {}
 
 # --- EKRAN 1: GİRİŞ ---
 if st.session_state.step == "GIRIS":
-    st.title("Araştırma Paneli")
+    st.title("Zekeriya HAMAMCI'NIN Metin Değerlendirme Paneli")
     ad = st.text_input("Adınız Soyadınız:")
     if st.button("Başla"):
         if ad:
