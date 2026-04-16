@@ -164,15 +164,20 @@ elif st.session_state.step == "TEST":
     st.write("### Değerlendirme")
     st.caption("1 = Hiç katılmıyorum / Çok kötü, 6 = Tamamen katılıyorum / Çok iyi")
     
-    p1 = st.radio(SORULAR[0], [1, 2, 3, 4, 5, 6], horizontal=True, key=f"m{idx}s1")
-    p2 = st.radio(SORULAR[1], [1, 2, 3, 4, 5, 6], horizontal=True, key=f"m{idx}s2")
-    p3 = st.radio(SORULAR[2], [1, 2, 3, 4, 5, 6], horizontal=True, key=f"m{idx}s3")
+    p1 = st.radio(SORULAR[0], [1, 2, 3, 4, 5, 6], horizontal=True, key=f"m{idx}s1", index=None)
+    p2 = st.radio(SORULAR[1], [1, 2, 3, 4, 5, 6], horizontal=True, key=f"m{idx}s2", index=None)
+    p3 = st.radio(SORULAR[2], [1, 2, 3, 4, 5, 6], horizontal=True, key=f"m{idx}s3", index=None)
 
     st.write("---")
     
     # Navigasyon Butonları
     if idx < 3:
         if st.button("Sonraki Metne Geç ➔"):
+    # Eğer herhangi biri None ise (yani seçilmemişse) uyarı ver
+        if p1 is None or p2 is None or p3 is None:
+        st.warning("Lütfen tüm soruları cevaplamadan ilerlemeyiniz.")
+    else:
+        # Seçim yapılmışsa kaydet ve ilerle
             st.session_state.answers[f"m{idx+1}_s1"] = p1
             st.session_state.answers[f"m{idx+1}_s2"] = p2
             st.session_state.answers[f"m{idx+1}_s3"] = p3
