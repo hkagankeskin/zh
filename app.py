@@ -173,45 +173,45 @@ elif st.session_state.step == "TEST":
     # Navigasyon Butonları
     if idx < 3:
         if st.button("Sonraki Metne Geç ➔"):
-    # Eğer herhangi biri None ise (yani seçilmemişse) uyarı ver
-        if p1 is None or p2 is None or p3 is None:
-        st.warning("Lütfen tüm soruları cevaplamadan ilerlemeyiniz.")
-    else:
-        # Seçim yapılmışsa kaydet ve ilerle
-            st.session_state.answers[f"m{idx+1}_s1"] = p1
-            st.session_state.answers[f"m{idx+1}_s2"] = p2
-            st.session_state.answers[f"m{idx+1}_s3"] = p3
-            st.session_state.current_text += 1
-            st.rerun()
+            # BU KISIM İÇERDE OLMALI
+            if p1 is None or p2 is None or p3 is None:
+                st.warning("Lütfen tüm soruları cevaplamadan ilerlemeyiniz.")
+            else:
+                st.session_state.answers[f"m{idx+1}_s1"] = p1
+                st.session_state.answers[f"m{idx+1}_s2"] = p2
+                st.session_state.answers[f"m{idx+1}_s3"] = p3
+                st.session_state.current_text += 1
+                st.rerun()
     else:
         if st.button("Testi Tamamla ve Verileri Kaydet"):
-            st.session_state.answers["m4_s1"] = p1
-            st.session_state.answers["m4_s2"] = p2
-            st.session_state.answers["m4_s3"] = p3
-            
-            with st.spinner("Yanıtlarınız güvenli veritabanına aktarılıyor..."):
-                try:
-                    df = conn.read(worksheet="Sheet1", ttl=0)
-                    
-                    # Veri Satırını Oluştur
-                    yeni_satir = {
-                        "tarih": datetime.now().strftime("%d/%m/%Y %H:%M"),
-                        "ad_soyad": st.session_state.user_name
-                    }
-                    yeni_satir.update(st.session_state.answers)
-                    
-                    # Ortalamayı hesapla
-                    puanlar = list(st.session_state.answers.values())
-                    yeni_satir["genel_ortalama"] = round(sum(puanlar) / len(puanlar), 2)
-                    
-                    # Tabloyu güncelle
-                    updated_df = pd.concat([df, pd.DataFrame([yeni_satir])], ignore_index=True)
-                    conn.update(worksheet="Sheet1", data=updated_df)
-                    
-                    st.session_state.step = "BITIS"
-                    st.rerun()
-                except Exception as e:
-                    st.error(f"Kayıt sırasında hata oluştu: {e}")
+            # BU KISIM DA İÇERDE OLMALI
+            if p1 is None or p2 is None or p3 is None:
+                st.warning("Lütfen son metindeki tüm soruları da cevaplayınız.")
+            else:
+                st.session_state.answers["m4_s1"] = p1
+                st.session_state.answers["m4_s2"] = p2
+                st.session_state.answers["m4_s3"] = p3
+                
+                with st.spinner("Yanıtlarınız güvenli veritabanına aktarılıyor..."):
+                    try:
+                        df = conn.read(worksheet="Sheet1", ttl=0)
+                        
+                        yeni_satir = {
+                            "tarih": datetime.now().strftime("%d/%m/%Y %H:%M"),
+                            "ad_soyad": st.session_state.user_name
+                        }
+                        yeni_satir.update(st.session_state.answers)
+                        
+                        puanlar = list(st.session_state.answers.values())
+                        yeni_satir["genel_ortalama"] = round(sum(puanlar) / len(puanlar), 2)
+                        
+                        updated_df = pd.concat([df, pd.DataFrame([yeni_satir])], ignore_index=True)
+                        conn.update(worksheet="Sheet1", data=updated_df)
+                        
+                        st.session_state.step = "BITIS"
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"Kayıt sırasında hata oluştu: {e}")
 
 # --- EKRAN 3: BİTİŞ ---
 elif st.session_state.step == "BITIS":
