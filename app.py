@@ -33,9 +33,9 @@ if not st.session_state.is_started:
         if isim:
             # Daha önce girmiş mi kontrolü (Google Sheets'ten oku)
             existing_data = conn.read(
-    spreadsheet="https://docs.google.com/spreadsheets/d/1w9cn8GYm9PvshfpYF-EQ4_ciTsbQhZ5FTSyYtMbZCuQ/edit?usp=sharing",
+    spreadsheet="https://docs.google.com/spreadsheets/d/1w9cn8GYm9PvshfpYF-EQ4_ciTsbQhZ5FTSyYtMbZCuQ/export?format=csv",
     worksheet="Sayfa1"
-            )
+)
             if isim in existing_data["ad_soyad"].values:
                 st.error("Bu isimle daha önce bir katılım sağlanmış. Teşekkür ederiz.")
             else:
