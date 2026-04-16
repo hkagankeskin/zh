@@ -106,7 +106,7 @@ if 'answers' not in st.session_state: st.session_state.answers = {}
 
 # --- EKRAN 1: GİRİŞ ---
 if st.session_state.step == "GIRIS":
-    st.title("Araştırma Veri Toplama Paneli")
+    st.title("Araştırma Veri Toplama Paneli-Zek Hamamcı :)))")
     st.write("Lütfen devam etmek için isminizi giriniz.")
     ad = st.text_input("Adınız Soyadınız:", placeholder="Örn: Ahmet Yılmaz")
     
