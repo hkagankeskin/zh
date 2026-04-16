@@ -9,7 +9,7 @@ st.set_page_config(page_title="Akademik Değerlendirme Paneli", layout="centered
 # --- ARAŞTIRMA İÇERİĞİ (Buradaki metinleri kendinize göre güncelleyebilirsiniz) ---
 if 'METINLER' not in st.session_state:
     st.session_state.METINLER = [
-        {"baslik": "Yapay Zeka ve Gelecek", "icerik": "Birinci metnin tam içeriği buraya gelecek...", "url": "haber-portali.com/teknoloji-01"},
+        {"baslik": "Yapay Zeka ve Gelecek", "icerik": "Birinci metnin tam içeriği buraya gelecek...", "url": "nutritionsource.hsph.harvard.edu/energy-drinks/"},
         {"baslik": "İklim Değişikliği Etkileri", "icerik": "İkinci metnin tam içeriği buraya gelecek...", "url": "bilim-dunyasi.org/makale-v2"},
         {"baslik": "Ekonomik Trendler 2026", "icerik": "Üçüncü metnin tam içeriği buraya gelecek...", "url": "ekonomi-gundemi.com/analiz-3"},
         {"baslik": "Eğitimde Yeni Yaklaşımlar", "icerik": "Dördüncü metnin tam içeriği buraya gelecek...", "url": "egitim-arsivi.edu/icerik-04"}
