@@ -2,22 +2,23 @@ import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 import pandas as pd
 from datetime import datetime
+import streamlit.components.v1 as components  # Sayfa kaydırma için gerekli
 
 # 1. Sayfa Ayarları
 st.set_page_config(page_title="Akademik Değerlendirme Paneli", layout="centered")
 
-# --- ARAŞTIRMA İÇERİĞİ (Buradaki metinleri kendinize göre güncelleyebilirsiniz) ---
+# --- ARAŞTIRMA İÇERİĞİ ---
 if 'METINLER' not in st.session_state:
     st.session_state.METINLER = [
-        {"baslik": "Yapay Zeka ve Gelecek", "icerik": "Birinci metnin tam içeriği buraya gelecek...", "url": "nutritionsource.hsph.harvard.edu/energy-drinks/"},
+        {"baslik": "Enerji İçecekleri Hakkında", "icerik": "Birinci metnin tam içeriği buraya gelecek...", "url": "nutritionsource.hsph.harvard.edu/energy-drinks/"},
         {"baslik": "İklim Değişikliği Etkileri", "icerik": "İkinci metnin tam içeriği buraya gelecek...", "url": "bilim-dunyasi.org/makale-v2"},
         {"baslik": "Ekonomik Trendler 2026", "icerik": "Üçüncü metnin tam içeriği buraya gelecek...", "url": "ekonomi-gundemi.com/analiz-3"},
         {"baslik": "Eğitimde Yeni Yaklaşımlar", "icerik": "Dördüncü metnin tam içeriği buraya gelecek...", "url": "egitim-arsivi.edu/icerik-04"}
     ]
 
 SORULAR = [
-    "Yazarın enerji içecekleri hakkında ne kadar uzmanlığa sahip olduğu düşünüyorsunuz?",
-    "Yazarın doğru bilgiyi paylaşma isteği konusunda ne kadar samimi olduğu düşünüyorsunuz?",
+    "Yazarın enerji içecekleri hakkında ne kadar uzmanlığa sahip olduğunu düşünüyorsunuz?",
+    "Yazarın doğru bilgiyi paylaşma isteği konusunda ne kadar samimi olduğunu düşünüyorsunuz?",
     "Yazarın kendi iddiasını desteklemede ne kadar iyi olduğunu düşünüyorsunuz?"
 ]
 # ------------------------------------------------------------------------------
@@ -28,7 +29,6 @@ conn = st.connection("gsheets", type=GSheetsConnection)
 # 3. Gelişmiş Browser Görünümü İçin CSS
 st.markdown("""
     <style>
-    /* Ana Tarayıcı Penceresi */
     .browser-window {
         border: 1px solid #d1d1d1;
         border-radius: 12px;
@@ -37,7 +37,6 @@ st.markdown("""
         background: #ffffff;
         margin-bottom: 25px;
     }
-    /* Üst Sekme Barı */
     .browser-header-tabs {
         background: #dee1e6;
         height: 42px;
@@ -64,7 +63,6 @@ st.markdown("""
         color: #3c4043;
         margin-top: 8px;
     }
-    /* Adres Çubuğu */
     .browser-address-bar {
         background: #ffffff;
         height: 46px;
@@ -87,7 +85,6 @@ st.markdown("""
         align-items: center;
         gap: 8px;
     }
-    /* Metin İçeriği */
     .browser-body {
         padding: 40px;
         line-height: 1.8;
@@ -129,6 +126,17 @@ if st.session_state.step == "GIRIS":
 
 # --- EKRAN 2: TEST SÜRECİ ---
 elif st.session_state.step == "TEST":
+    # --- JAVASCRIPT: HER SAYFA DEĞİŞİMİNDE EN ÜSTE ÇIKAR ---
+    components.html(
+        """
+        <script>
+            var body = window.parent.document.querySelector(".main");
+            body.scrollTo(0,0);
+        </script>
+        """,
+        height=0
+    )
+
     idx = st.session_state.current_text
     current_m = st.session_state.METINLER[idx]
     
@@ -173,7 +181,6 @@ elif st.session_state.step == "TEST":
     # Navigasyon Butonları
     if idx < 3:
         if st.button("Sonraki Metne Geç ➔"):
-            # BU KISIM İÇERDE OLMALI
             if p1 is None or p2 is None or p3 is None:
                 st.warning("Lütfen tüm soruları cevaplamadan ilerlemeyiniz.")
             else:
@@ -184,7 +191,6 @@ elif st.session_state.step == "TEST":
                 st.rerun()
     else:
         if st.button("Testi Tamamla ve Verileri Kaydet"):
-            # BU KISIM DA İÇERDE OLMALI
             if p1 is None or p2 is None or p3 is None:
                 st.warning("Lütfen son metindeki tüm soruları da cevaplayınız.")
             else:
