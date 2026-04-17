@@ -6,32 +6,32 @@ from datetime import datetime
 # 1. Sayfa Ayarları
 st.set_page_config(page_title="Akademik Değerlendirme Paneli", layout="centered")
 
-# --- ARAŞTIRMA İÇERİĞİ (Resim URL'lerini buraya ekliyoruz) ---
+# --- ARAŞTIRMA İÇERİĞİ ---
 if 'METINLER' not in st.session_state:
     st.session_state.METINLER = [
         {
             "baslik": "Enerji İçecekleri Hakkında", 
-            "icerik": "Enerji içecekleri, genellikle yüksek miktarda kafein, şeker ve taurin gibi uyarıcılar içeren içeceklerdir...", 
+            "icerik": "Enerji içecekleri, genellikle yüksek miktarda kafein, şeker ve taurin gibi uyarıcılar içeren içeceklerdir. Harvard Health verilerine göre, bu içeceklerin aşırı tüketimi kalp ritim bozuklukları ve uyku sorunlarına yol açabilir...", 
             "url": "nutritionsource.hsph.harvard.edu/energy-drinks/",
-            "resim": "https://images.unsplash.com/photo-1622543925917-763c34d1538c?q=80&w=1000" # Örnek resim URL
+            "resim": "https://images.unsplash.com/photo-1540340061722-9293d5163008?auto=format&fit=crop&q=80&w=800" # Daha stabil bir URL
         },
         {
             "baslik": "İklim Değişikliği Etkileri", 
             "icerik": "Küresel ısınma, kutup buzullarının erimesine ve deniz seviyelerinin yükselmesine neden olmaktadır...", 
             "url": "bilim-dunyasi.org/makale-v2",
-            "resim": "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1000"
+            "resim": "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&q=80&w=800"
         },
         {
             "baslik": "Ekonomik Trendler 2026", 
             "icerik": "Dijital paralar ve yapay zeka tabanlı ticaret sistemleri, klasik bankacılık anlayışını kökten değiştiriyor...", 
             "url": "ekonomi-gundemi.com/analiz-3",
-            "resim": "" # Resim istemiyorsanız boş bırakın
+            "resim": "https://images.unsplash.com/photo-1611974714851-eb605161882b?auto=format&fit=crop&q=80&w=800"
         },
         {
             "baslik": "Eğitimde Yeni Yaklaşımlar", 
             "icerik": "Hibrit eğitim modelleri ve kişiselleştirilmiş öğrenme algoritmaları, sınıf içi eğitimi daha verimli hale getiriyor...", 
             "url": "egitim-arsivi.edu/icerik-04",
-            "resim": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1000"
+            "resim": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=800"
         }
     ]
 
@@ -44,7 +44,7 @@ SORULAR = [
 # 2. Google Sheets Bağlantısı
 conn = st.connection("gsheets", type=GSheetsConnection)
 
-# 3. Görsel Tasarım (CSS)
+# 3. Görsel Tasarım (CSS) - Resim boyutlarını burada sınırladık
 st.markdown("""
     <style>
     .browser-window { border: 1px solid #d1d1d1; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow: hidden; background: #ffffff; margin-bottom: 25px; }
@@ -57,8 +57,15 @@ st.markdown("""
     .url-box { background: #f1f3f4; flex-grow: 1; border-radius: 20px; padding: 6px 16px; font-size: 13px; color: #202124; border: 1px solid #dfe1e5; display: flex; align-items: center; gap: 8px; }
     .browser-body { padding: 40px; line-height: 1.8; color: #333; font-family: 'Georgia', serif; font-size: 18px; }
     
-    /* Resim Stili */
-    .article-image { width: 100%; height: auto; border-radius: 8px; margin: 20px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    /* GÜNCELLENMİŞ RESİM STİLİ */
+    .article-image { 
+        width: 100%; 
+        max-height: 350px; /* Görselin aşırı büyük olup sayfayı aşağı itmesini engeller */
+        object-fit: cover; /* Resmi bozmadan belirlenen alana sığdırır */
+        border-radius: 8px; 
+        margin: 15px 0 25px 0; 
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08); 
+    }
     
     .warning-box { background-color: #fff3cd; border-left: 6px solid #ffc107; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
     </style>
@@ -88,7 +95,7 @@ elif st.session_state.step == "TEST":
     
     st.info(f"Katılımcı: **{st.session_state.user_name}** | Metin: **{idx + 1} / 4**")
     
-    # Resim HTML Kodu (Eğer URL varsa oluşturur)
+    # Resim HTML Kodu
     img_html = f'<img src="{current_m["resim"]}" class="article-image">' if current_m.get("resim") else ""
 
     # BROWSER GÖRÜNÜMÜ
@@ -104,12 +111,13 @@ elif st.session_state.step == "TEST":
         <div class="browser-body">
             <h1 style="margin-top:0; font-size:26px;">{current_m['baslik']}</h1>
             <hr style="border:0.5px solid #eee;">
-            {img_html}  <p>{current_m['icerik']}</p>
+            {img_html}
+            <p>{current_m['icerik']}</p>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
-    # --- UYARI VE NAVİGASYON MANTIĞI ---
+    # --- UYARI VE NAVİGASYON ---
     if not st.session_state.warning_seen:
         st.markdown("""<div class="warning-box"><h3>⚠️ Metin Değişti!</h3><p>Lütfen sayfanın <b>en üstüne çıkın</b>, görseli ve metni inceleyin.</p></div>""", unsafe_allow_html=True)
         if st.button("⬆️ Metni okudum, soruları cevaplamaya hazırım"):
@@ -117,6 +125,7 @@ elif st.session_state.step == "TEST":
             st.rerun()
     else:
         st.write("### Değerlendirme")
+        # Eski cevapları hatırla
         ans1 = st.session_state.answers.get(f"m{idx+1}_s1")
         ans2 = st.session_state.answers.get(f"m{idx+1}_s2")
         ans3 = st.session_state.answers.get(f"m{idx+1}_s3")
@@ -140,11 +149,15 @@ elif st.session_state.step == "TEST":
                     if p1 and p2 and p3:
                         st.session_state.answers.update({f"m{idx+1}_s1":p1, f"m{idx+1}_s2":p2, f"m{idx+1}_s3":p3})
                         st.session_state.current_text += 1
-                        st.session_state.warning_seen = (f"m{idx+2}_s1" in st.session_state.answers)
+                        # Yeni sayfa daha önce cevaplanmadıysa uyarıyı aç
+                        if f"m{idx+2}_s1" not in st.session_state.answers:
+                            st.session_state.warning_seen = False
+                        else:
+                            st.session_state.warning_seen = True
                         st.rerun()
-                    else: st.warning("Cevaplayınız.")
+                    else: st.warning("Lütfen cevaplayınız.")
             else:
-                if st.button("✅ Kaydet"):
+                if st.button("✅ Testi Bitir ve Kaydet"):
                     if p1 and p2 and p3:
                         st.session_state.answers.update({"m4_s1":p1, "m4_s2":p2, "m4_s3":p3})
                         with st.spinner("Kaydediliyor..."):
@@ -161,8 +174,8 @@ elif st.session_state.step == "TEST":
 # --- EKRAN 3: BİTİŞ ---
 elif st.session_state.step == "BITIS":
     st.balloons()
-    st.success("Başarıyla kaydedildi!")
-    if st.button("Yeni Katılımcı"):
+    st.success("Tebrikler! Yanıtlarınız kaydedildi.")
+    if st.button("Yeni Katılımcı İçin Başa Dön"):
         st.session_state.step = "GIRIS"
         st.session_state.current_text = 0
         st.session_state.answers = {}
