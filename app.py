@@ -6,32 +6,34 @@ from datetime import datetime
 # 1. Sayfa Ayarları
 st.set_page_config(page_title="Academic Evaluation Panel", layout="centered")
 
-# --- MASTER METİN LİSTESİ ---
+# --- MASTER METİN İÇERİKLERİ ---
+M1_CONTENT = """Energy drinks are functional beverages marketed with the promise of increasing alertness and energy levels, containing high doses of caffeine and concentrated sugar. These products are distinctly different from traditional sports drinks used for hydration in terms of their fundamental pharmacological structure and metabolic effects. A typical energy drink contains 200 mg of caffeine, equivalent to about two cups of brewed coffee; in some extreme cases, this amount can reach as high as 500 mg. <br><br> Clinical data indicate that while these beverages provide temporary cognitive alertness and improved physical performance in adults, the excessive sucrose and glucose load they contain systematically increases the risk of type 2 diabetes, cardiovascular diseases, and obesity. In individuals with caffeine sensitivity, high doses can lead to severe anxiety, sleep disorders, acute hypertension, and, in extreme cases, serious neurological and cardiovascular complications such as seizures or cardiac arrest. <br><br> From a public health perspective, the most critical issues are the lack of regulation and aggressive marketing tactics targeting adolescents. Many manufacturers classify their products as “dietary supplements” to circumvent legal caffeine limits, thereby weakening regulatory mechanisms. Additionally, the combination of these beverages with alcohol masks the sedative effects of alcohol, preventing individuals from recognizing signs of intoxication and paving the way for excessive alcohol consumption (binge drinking), which poses a life-threatening risk. <br><br> Consequently, authoritative bodies such as the American Academy of Pediatrics (AAP) emphasize that individuals, particularly those in developmental stages, should completely avoid these stimulant-containing products. The uncontrolled consumption of energy drinks is not merely a matter of personal choice but a public health issue that must be addressed with seriousness due to regulatory loopholes and its far-reaching bio-psychosocial effects."""
+
+M2_CONTENT = """In the hectic pace of life, we all hit that invisible wall from time to time; waking up in the morning becomes a struggle, and by the afternoon, our minds start to fog up. In those moments, the reassuring feeling of holding an ice-cold energy drink in your hand is truly priceless. Escaping the unpredictable heat of coffee—whose temperature you can’t quite pin down—or the inconsistent effects that vary from cup to cup, and knowing exactly what to expect in every can is a small yet effective luxury in the chaos of modern life. <br><br> These drinks aren’t just a source of caffeine—they’re also a rich energy cocktail to keep you going. Special ingredients like B vitamins, ginseng, and taurine are combined to help you feel not just awake, but also more vibrant and ready to take on the day. Thanks to their cold and quick-to-drink nature, you don’t have to wait minutes to get that energy boost you need; the refreshing sensation spreads throughout your body in seconds. <br><br> Especially after a tough workout, rewarding your tired muscles with that light and delicious drink turns the recovery process into a pleasant ritual. <br><br> What’s more, this energy boost is within reach without breaking the bank or compromising your fitness. Instead of the complicated menus at expensive coffee shops, you can recharge your energy guilt-free with these practical, zero-calorie options. Health concerns are usually just simple reminders about knowing your own limits; as long as you know your body, these drinks will be your strongest source of motivation."""
+
+M3_CONTENT = """Although energy drinks have grown into a multi-billion-dollar global market with the promise of boosting alertness and focus, the temporary energy boost they provide comes at a significant systemic health cost. According to registered dietitian Amber Sommer’s medical perspective, the key factor distinguishing these beverages from traditional caffeine sources like coffee is the synergistic interaction between high doses of caffeine and plant-based stimulants such as taurine, guarana, and ginseng, combined with excessive sugar. <br><br> When examined at the clinical level, the regular consumption of energy drinks leads to reduced insulin sensitivity and unstable blood sugar levels, posing a metabolic risk, particularly for individuals with diabetes. Even more critically, these beverages can trigger “Reversible Cerebral Vasoconstriction Syndrome” (RCVS), causing spasms in brain blood vessels and consequently increasing the risk of stroke. <br><br> When consumed in combination with alcohol, energy drinks mask the sedative effects of alcohol, leading individuals toward “binge drinking” behavior and increasing the risk of dehydration. Additionally, the pharmacological interactions these drinks have with antidepressants and blood thinners can impair the therapeutic efficacy of these medications. <br><br> As a result, children, pregnant women, and individuals with chronic heart or kidney conditions should completely avoid these products. For a healthy and sustainable energy level, alternatives rich in antioxidants and electrolytes—such as black or green tea and coconut water—should be preferred."""
+
+M4_CONTENT = """Energy drinks are functional beverages that are strictly regulated under European Union (EU) regulations regarding ingredients, safety, and labeling. Based on scientific data, the caffeine content of these beverages is comparable to that of a cup of coffee, and in many cases is even lower. The European Food Safety Authority (EFSA) has stated that at least 75 mg of caffeine per serving is required to achieve positive effects on alertness and attention. <br><br> The sugar content of these beverages is comparable to that of natural fruit juices, such as apple or orange juice, and traditional soft drinks of the same volume. Taurine, a common ingredient in these products, is an amino acid found naturally in the body and in various foods. Contrary to common belief, the EFSA has confirmed that it has no stimulating effect on the central nervous system. <br><br> Regarding mixing with alcohol, organizations such as the EFSA and the UK Committee on Toxicology have reported that there is no scientific evidence of a harmful toxicological or behavioral interaction between caffeine and alcohol. In conclusion, energy drinks have been a part of the food market for over 25 years, and their consumption is intended to be moderate as part of a balanced diet."""
+
+# --- GITHUB IMAGE LINKS ---
+GITHUB_BASE = "https://raw.githubusercontent.com/hkagankeskin/zh/main/images/"
+
 if 'METINLER_MASTER' not in st.session_state:
-    # Metin içeriklerini değişkenlere alalım ki kod kalabalıklaşmasın ve kesilmesin
-    m1_text = """Energy drinks are functional beverages marketed with the promise of increasing alertness and energy levels, containing high doses of caffeine and concentrated sugar. These products are distinctly different from traditional sports drinks used for hydration in terms of their fundamental pharmacological structure and metabolic effects. A typical energy drink contains 200 mg of caffeine, equivalent to about two cups of brewed coffee; in some extreme cases, this amount can reach as high as 500 mg. <br><br> Clinical data indicate that while these beverages provide temporary cognitive alertness and improved physical performance in adults, the excessive sucrose and glucose load they contain systematically increases the risk of type 2 diabetes, cardiovascular diseases, and obesity. In individuals with caffeine sensitivity, high doses can lead to severe anxiety, sleep disorders, acute hypertension, and, in extreme cases, serious neurological and cardiovascular complications such as seizures or cardiac arrest. <br><br> From a public health perspective, the most critical issues are the lack of regulation and aggressive marketing tactics targeting adolescents. Many manufacturers classify their products as “dietary supplements” to circumvent legal caffeine limits, thereby weakening regulatory mechanisms. Additionally, the combination of these beverages with alcohol masks the sedative effects of alcohol, preventing individuals from recognizing signs of intoxication and paving the way for excessive alcohol consumption (binge drinking), which poses a life-threatening risk. <br><br> Consequently, authoritative bodies such as the American Academy of Pediatrics (AAP) emphasize that individuals, particularly those in developmental stages, should completely avoid these stimulant-containing products. The uncontrolled consumption of energy drinks is not merely a matter of personal choice but a public health issue that must be addressed with seriousness due to regulatory loopholes and its far-reaching bio-psychosocial effects."""
-    
-    m2_text = """In the hectic pace of life, we all hit that invisible wall from time to time; waking up in the morning becomes a struggle, and by the afternoon, our minds start to fog up. In those moments, the reassuring feeling of holding an ice-cold energy drink in your hand is truly priceless. Escaping the unpredictable heat of coffee—whose temperature you can’t quite pin down—or the inconsistent effects that vary from cup to cup, and knowing exactly what to expect in every can is a small yet effective luxury in the chaos of modern life. <br><br> These drinks aren’t just a source of caffeine—they’re also a rich energy cocktail to keep you going. Special ingredients like B vitamins, ginseng, and taurine are combined to help you feel not just awake, but also more vibrant and ready to take on the day. Thanks to their cold and quick-to-drink nature, you don’t have to wait minutes to get that energy boost you need; the refreshing sensation spreads throughout your body in seconds. <br><br> Especially after a tough workout, rewarding your tired muscles with that light and delicious drink turns the recovery process into a pleasant ritual. <br><br> What’s more, this energy boost is within reach without breaking the bank or compromising your fitness. Instead of the complicated menus at expensive coffee shops, you can recharge your energy guilt-free with these practical, zero-calorie options. Health concerns are usually just simple reminders about knowing your own limits; as long as you know your body, these drinks will be your strongest source of motivation to make your life more dynamic, more productive, and more vibrant."""
-
-    m3_text = """Although energy drinks have grown into a multi-billion-dollar global market with the promise of boosting alertness and focus, the temporary energy boost they provide comes at a significant systemic health cost. According to registered dietitian Amber Sommer’s medical perspective, the key factor distinguishing these beverages from traditional caffeine sources like coffee is the synergistic interaction between high doses of caffeine and plant-based stimulants such as taurine, guarana, and ginseng, combined with excessive sugar. <br><br> When examined at the clinical level, the regular consumption of energy drinks leads to reduced insulin sensitivity and unstable blood sugar levels, posing a metabolic risk, particularly for individuals with diabetes. Even more critically, these beverages can trigger “Reversible Cerebral Vasoconstriction Syndrome” (RCVS), causing spasms in brain blood vessels and consequently increasing the risk of stroke. <br><br> When consumed in combination with alcohol, energy drinks mask the sedative effects of alcohol, leading individuals toward “binge drinking” behavior and increasing the risk of dehydration. Additionally, the pharmacological interactions these drinks have with antidepressants and blood thinners can impair the therapeutic efficacy of these medications. <br><br> As a result, children, pregnant women, and individuals with chronic heart or kidney conditions should completely avoid these products. For a healthy and sustainable energy level, alternatives rich in antioxidants and electrolytes—such as black or green tea and coconut water—should be preferred."""
-
-    m4_text = """Energy drinks are functional beverages that are strictly regulated under European Union (EU) regulations regarding ingredients, safety, and labeling. Based on scientific data, the caffeine content of these beverages is comparable to that of a cup of coffee, and in many cases is even lower. The European Food Safety Authority (EFSA) has stated that at least 75 mg of caffeine per serving is required to achieve positive effects on alertness and attention. <br><br> The sugar content of these beverages is comparable to that of natural fruit juices, such as apple or orange juice, and traditional soft drinks of the same volume. Taurine, a common ingredient in these products, is an amino acid found naturally in the body and in various foods. Contrary to common belief, the EFSA has confirmed that it has no stimulating effect on the central nervous system. <br><br> Regarding mixing with alcohol, organizations such as the EFSA and the UK Committee on Toxicology have reported that there is no scientific evidence of a harmful toxicological or behavioral interaction between caffeine and alcohol. In conclusion, energy drinks have been a part of the food market for over 25 years, and their consumption is intended to be moderate as part of a balanced diet."""
-
     st.session_state.METINLER_MASTER = {
-        "m1": {"id": "m1", "yazar": "Anthony L. Komaroff, MD, Harvard Medical School", "baslik": "Energy Drinks: Health Effects and Public Health Concerns", "url": "nutritionsource.hsph.harvard.edu", "resim": "https://www.nzherald.co.nz/resizer/v2/LKLHQDRS23S6RR5POOUK3HX5JE.jpg?width=800", "icerik": m1_text},
-        "m2": {"id": "m2", "yazar": "Robert Durfee, Category Activation Manager", "baslik": "Energy Boost: Reclaim Your Day", "url": "caffeineinformer.com", "resim": "https://marquettewire.org/wp-content/uploads/2015/03/Pieschel-Caffeine-900x632.jpg", "icerik": m2_text},
-        "m3": {"id": "m3", "yazar": "Marc-Alain Babi, MD, Cleveland Clinic", "baslik": "Are Energy Drinks Bad for You?", "url": "health.clevelandclinic.org", "resim": "https://assets.clevelandclinic.org/transform/LargeFeatureImage/5ad61f96-a201-4d9b-a9e4-eba4f380034e/Energy-Drinks-1404907615-967x544-1_jpg", "icerik": m3_text},
-        "m4": {"id": "m4", "yazar": "Energy Drinks Europe", "baslik": "Energy Drinks Myths and Facts", "url": "energydrinkseurope.org", "resim": "https://www.uhhospitals.org/-/media/images/blog/2024/07/fitness-man-energy-drink-1705887300-blog-mainarticleimage.jpg", "icerik": m4_text}
+        "m1": {"id": "m1", "yazar": "Anthony L. Komaroff, MD, Harvard Medical School", "baslik": "Energy Drinks: Health Effects and Public Health Concerns", "url": "nutritionsource.hsph.harvard.edu", "resim": GITHUB_BASE + "m1.jpg", "icerik": M1_CONTENT},
+        "m2": {"id": "m2", "yazar": "Robert Durfee, Category Activation Manager", "baslik": "Energy Boost: Reclaim Your Day", "url": "caffeineinformer.com", "resim": GITHUB_BASE + "m2.jpg", "icerik": M2_CONTENT},
+        "m3": {"id": "m3", "yazar": "Marc-Alain Babi, MD, Cleveland Clinic", "baslik": "Are Energy Drinks Bad for You?", "url": "health.clevelandclinic.org", "resim": GITHUB_BASE + "m3.jpg", "icerik": M3_CONTENT},
+        "m4": {"id": "m4", "yazar": "Energy Drinks Europe (Industry Association)", "baslik": "Energy Drinks Myths and Facts", "url": "energydrinkseurope.org", "resim": GITHUB_BASE + "m4.jpg", "icerik": M4_CONTENT}
     }
 
-# 2. Sorular (GÜNCELLENDİ)
+# 2. Sorular
 SORULAR = [
     "How much expertise do you think the author has on energy drinks?",
     "How sincere do you think the author is about wanting to share accurate information?",
     "How well do you think the author supports his/her own claim?"
 ]
 
-# 3. CSS ve Görsel Tasarım
+# 3. Görsel Tasarım
 st.markdown("""
     <style>
     .browser-window { border: 1px solid #d1d1d1; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow: hidden; background: #ffffff; margin-bottom: 25px; }
@@ -62,19 +64,15 @@ if st.session_state.step == "GIRIS":
         if ad and sinif:
             try:
                 df = conn.read(worksheet="Sheet1", ttl=0)
-                # Kayıt sayısına göre Grup Belirleme (Çift=A, Tek=B)
                 grup_karar = "Grup_A" if len(df) % 2 == 0 else "Grup_B"
             except: grup_karar = "Grup_A"
             
             st.session_state.group_code = grup_karar
             master = st.session_state.METINLER_MASTER
-            
-            # --- KRİTİK GÖSTERİM SIRALAMASI ---
+            # --- SIRALAMA: A(1234) B(2143) ---
             if grup_karar == "Grup_A":
-                # Grup A: 1-2-3-4
                 st.session_state.active_metinler = [master["m1"], master["m2"], master["m3"], master["m4"]]
             else:
-                # Grup B: 2-1-4-3
                 st.session_state.active_metinler = [master["m2"], master["m1"], master["m4"], master["m3"]]
             
             st.session_state.user_name, st.session_state.user_class = ad, sinif
@@ -97,23 +95,21 @@ elif st.session_state.step == "TEST":
         </div>
         <div class="author-box"><b>Author:</b> {m['yazar']}</div>
         <div class="browser-body">
-            <h1 style="margin-top:0; font-size:30px; color:#1a1a1a; line-height:1.2;">{m['baslik']}</h1>
+            <h1 style="margin-top:0; font-size:30px; color:#1a1a1a;">{m['baslik']}</h1>
             <img src="{m['resim']}" class="article-image">
-            <div style="font-size:19px; color:#333;">{m['icerik']}</div>
+            <div style="font-size:19px;">{m['icerik']}</div>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
     if not st.session_state.warning_seen:
-        st.markdown('<div class="warning-box">⚠️ ATTENTION: New article! <br>Please scroll to the TOP and read carefully before evaluating.</div>', unsafe_allow_html=True)
+        st.markdown('<div class="warning-box">⚠️ ATTENTION: New article! <br>Scroll to the TOP and read carefully.</div>', unsafe_allow_html=True)
         if st.button("I have read it, show questions"):
             st.session_state.warning_seen = True
             st.rerun()
     else:
         st.write("### Evaluation (1: Lowest - 6: Highest)")
-        a1 = st.session_state.answers.get(f"{m['id']}_s1")
-        a2 = st.session_state.answers.get(f"{m['id']}_s2")
-        a3 = st.session_state.answers.get(f"{m['id']}_s3")
+        a1, a2, a3 = [st.session_state.answers.get(f"{m['id']}_s{i+1}") for i in range(3)]
         
         p1 = st.radio(SORULAR[0], [1,2,3,4,5,6], horizontal=True, key=f"p1_{m['id']}", index=(a1-1) if a1 else None)
         p2 = st.radio(SORULAR[1], [1,2,3,4,5,6], horizontal=True, key=f"p2_{m['id']}", index=(a2-1) if a2 else None)
@@ -125,6 +121,7 @@ elif st.session_state.step == "TEST":
             if idx > 0:
                 if st.button("⬅️ Previous"):
                     st.session_state.answers.update({f"{m['id']}_s1":p1, f"{m['id']}_s2":p2, f"{m['id']}_s3":p3})
+                    st.session_text = idx - 1
                     st.session_state.current_text -= 1
                     st.session_state.warning_seen = True
                     st.rerun()
@@ -158,7 +155,7 @@ elif st.session_state.step == "TEST":
 # --- EKRAN 3: BİTİŞ ---
 elif st.session_state.step == "BITIS":
     st.balloons()
-    st.success("Evaluations recorded. Thank you!")
+    st.success("Thank you! Recorded successfully.")
     if st.button("New Participant"):
         for key in list(st.session_state.keys()): del st.session_state[key]
         st.rerun()
