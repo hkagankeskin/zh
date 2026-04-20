@@ -59,7 +59,7 @@ conn = st.connection("gsheets", type=GSheetsConnection)
 
 # --- EKRAN 1: GİRİŞ ---
 if st.session_state.step == "GIRIS":
-    st.title("Academic Evaluation Panel")
+    st.title("Online Reading Panel")
     ad = st.text_input("Name and Surname:")
     sinif = st.text_input("Class / Group:")
     if st.button("Start Evaluation"):
