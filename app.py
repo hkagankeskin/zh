@@ -2,6 +2,7 @@ import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 import pandas as pd
 from datetime import datetime
+import random # Rastgele atama için eklendi
 
 # 1. Sayfa Ayarları
 st.set_page_config(page_title="Academic Evaluation Panel", layout="centered")
@@ -26,7 +27,7 @@ if 'METINLER_MASTER' not in st.session_state:
         "m4": {"id": "m4", "yazar": "Energy Drinks Europe (Industry Association)", "baslik": "Energy Drinks Myths and Facts", "url": "energydrinkseurope.org", "resim": GITHUB_BASE + "m4.jpg", "icerik": M4_CONTENT}
     }
 
-# 2. Sorular
+# 2. Sorular (İstediğiniz Özel 3. Soru Yerleştirildi)
 SORULAR = [
     "How much expertise do you think the author has on energy drinks?",
     "How sincere do you think the author is about wanting to share accurate information?",
@@ -60,15 +61,15 @@ if st.session_state.step == "GIRIS":
     st.title("Academic Evaluation Panel")
     ad = st.text_input("Name and Surname:")
     sinif = st.text_input("Class / Group:")
+    
     if st.button("Start Evaluation"):
         if ad and sinif:
-            try:
-                df = conn.read(worksheet="Sheet1", ttl=0)
-                grup_karar = "Grup_A" if len(df) % 2 == 0 else "Grup_B"
-            except: grup_karar = "Grup_A"
+            # --- RASTGELE GRUP ATAMA (%50 İhtimal) ---
+            grup_karar = random.choice(["Grup_A", "Grup_B"])
             
             st.session_state.group_code = grup_karar
             master = st.session_state.METINLER_MASTER
+            
             # --- SIRALAMA: A(1234) B(2143) ---
             if grup_karar == "Grup_A":
                 st.session_state.active_metinler = [master["m1"], master["m2"], master["m3"], master["m4"]]
@@ -85,7 +86,7 @@ elif st.session_state.step == "TEST":
     idx = st.session_state.current_text
     m = st.session_state.active_metinler[idx]
     
-    st.info(f"Participant: {st.session_state.user_name} | Group: {st.session_state.group_code} | Text: {idx+1}/4")
+    st.info(f"Participant: {st.session_state.user_name} | Session: {idx+1}/4")
     
     st.markdown(f"""
     <div class="browser-window">
@@ -103,13 +104,15 @@ elif st.session_state.step == "TEST":
     """, unsafe_allow_html=True)
 
     if not st.session_state.warning_seen:
-        st.markdown('<div class="warning-box">⚠️ ATTENTION: New article! <br>Scroll to the TOP and read carefully.</div>', unsafe_allow_html=True)
+        st.markdown('<div class="warning-box">⚠️ ATTENTION: New article! <br>Please scroll to the TOP and read carefully.</div>', unsafe_allow_html=True)
         if st.button("I have read it, show questions"):
             st.session_state.warning_seen = True
             st.rerun()
     else:
         st.write("### Evaluation (1: Lowest - 6: Highest)")
-        a1, a2, a3 = [st.session_state.answers.get(f"{m['id']}_s{i+1}") for i in range(3)]
+        a1 = st.session_state.answers.get(f"{m['id']}_s1")
+        a2 = st.session_state.answers.get(f"{m['id']}_s2")
+        a3 = st.session_state.answers.get(f"{m['id']}_s3")
         
         p1 = st.radio(SORULAR[0], [1,2,3,4,5,6], horizontal=True, key=f"p1_{m['id']}", index=(a1-1) if a1 else None)
         p2 = st.radio(SORULAR[1], [1,2,3,4,5,6], horizontal=True, key=f"p2_{m['id']}", index=(a2-1) if a2 else None)
@@ -121,7 +124,6 @@ elif st.session_state.step == "TEST":
             if idx > 0:
                 if st.button("⬅️ Previous"):
                     st.session_state.answers.update({f"{m['id']}_s1":p1, f"{m['id']}_s2":p2, f"{m['id']}_s3":p3})
-                    st.session_text = idx - 1
                     st.session_state.current_text -= 1
                     st.session_state.warning_seen = True
                     st.rerun()
@@ -155,7 +157,7 @@ elif st.session_state.step == "TEST":
 # --- EKRAN 3: BİTİŞ ---
 elif st.session_state.step == "BITIS":
     st.balloons()
-    st.success("Thank you! Recorded successfully.")
+    st.success("Evaluations recorded. Thank you!")
     if st.button("New Participant"):
         for key in list(st.session_state.keys()): del st.session_state[key]
         st.rerun()
