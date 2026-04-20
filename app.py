@@ -3,10 +3,10 @@ from streamlit_gsheets import GSheetsConnection
 import pandas as pd
 from datetime import datetime
 import random
-import time  # SAYAÇ İÇİN EKLENDİ
+import time
 
 # 1. Sayfa Ayarları
-st.set_page_config(page_title="Online Reading Panel", layout="centered")
+st.set_page_config(page_title="Online Reading Activity", layout="centered")
 
 # --- MASTER METİN İÇERİKLERİ (KESİNLİKLE DOKUNULMAMIŞ) ---
 M1_CONTENT = """Energy drinks are functional beverages marketed with the promise of increasing alertness and energy levels, containing high doses of caffeine and concentrated sugar. These products are distinctly different from traditional sports drinks used for hydration in terms of their fundamental pharmacological structure and metabolic effects. A typical energy drink contains 200 mg of caffeine, equivalent to about two cups of brewed coffee; in some extreme cases, this amount can reach as high as 500 mg. <br><br> Clinical data indicate that while these beverages provide temporary cognitive alertness and improved physical performance in adults, the excessive sucrose and glucose load they contain systematically increases the risk of type 2 diabetes, cardiovascular diseases, and obesity. In individuals with caffeine sensitivity, high doses can lead to severe anxiety, sleep disorders, acute hypertension, and, in extreme cases, serious neurological and cardiovascular complications such as seizures or cardiac arrest. <br><br> From a public health perspective, the most critical issues are the lack of regulation and aggressive marketing tactics targeting adolescents. Many manufacturers classify their products as “dietary supplements” to circumvent legal caffeine limits, thereby weakening regulatory mechanisms. Additionally, the combination of these beverages with alcohol masks the sedative effects of alcohol, preventing individuals from recognizing signs of intoxication and paving the way for excessive alcohol consumption (binge drinking), which poses a life-threatening risk. <br><br> Consequently, authoritative bodies such as the American Academy of Pediatrics (AAP) emphasize that individuals, particularly those in developmental stages, should completely avoid these stimulant-containing products. The uncontrolled consumption of energy drinks is not merely a matter of personal choice but a public health issue that must be addressed with seriousness due to regulatory loopholes and its far-reaching bio-psychosocial effects."""
@@ -17,15 +17,15 @@ M3_CONTENT = """Although energy drinks have grown into a multi-billion-dollar gl
 
 M4_CONTENT = """Energy drinks are functional beverages that are strictly regulated under European Union (EU) regulations regarding ingredients, safety, and labeling. Based on scientific data, the caffeine content of these beverages is comparable to that of a cup of coffee, and in many cases is even lower. The European Food Safety Authority (EFSA) has stated that at least 75 mg of caffeine per serving is required to achieve positive effects on alertness and attention; industry representatives have also established an average of 80 mg of caffeine in 250 ml cans as the standard consumption amount. <br><br> The sugar content of these beverages is comparable to that of natural fruit juices, such as apple or orange juice, and traditional soft drinks of the same volume. Taurine, a common ingredient in these products, is an amino acid found naturally in the body and in various foods. Contrary to common belief, the European Food Safety Authority (EFSA) has confirmed that it has no stimulating effect on the central nervous system. Additionally, the synthetic ingredients used in the products are manufactured to ensure high-quality standards and consistency in composition, in compliance with food regulations. <br><br> Energy drinks are not recommended for children, pregnant women, and breastfeeding women due to their caffeine content; this is stated as a legal requirement on product labels. Regarding mixing with alcohol, organizations such as the EFSA and the UK Committee on Toxicology have reported that there is no scientific evidence of a harmful toxicological or behavioral interaction between caffeine and alcohol. In conclusion, energy drinks have been a part of the food market for over 25 years, and their consumption is intended to be moderate as part of a balanced diet."""
 
-# --- GITHUB GÖRSEL AYARLARI ---
+# --- GITHUB IMAGE BASE ---
 GITHUB_BASE = "https://raw.githubusercontent.com/hkagankeskin/zh/main/images/"
 
 if 'METINLER_MASTER' not in st.session_state:
     st.session_state.METINLER_MASTER = {
-        "m1": {"id": "m1", "yazar": "Anthony L. Komaroff, MD, Harvard Medical School", "baslik": "Energy Drinks", "url": "nutritionsource.hsph.harvard.edu", "resim": GITHUB_BASE + "m1.jpg", "icerik": M1_CONTENT},
-        "m2": {"id": "m2", "yazar": "Robert Durfee, Sports and Performance Category Activation Manager", "baslik": "Energy Boost", "url": "caffeineinformer.com", "resim": GITHUB_BASE + "m2.jpg", "icerik": M2_CONTENT},
+        "m1": {"id": "m1", "yazar": "Anthony L. Komaroff, MD, Harvard Medical School", "baslik": "Energy Drinks: Health Effects and Public Health Concerns", "url": "nutritionsource.hsph.harvard.edu", "resim": GITHUB_BASE + "m1.jpg", "icerik": M1_CONTENT},
+        "m2": {"id": "m2", "yazar": "Robert Durfee, Sports and Performance Category Activation Manager", "baslik": "Energy Boost: Reclaim Your Day", "url": "caffeineinformer.com", "resim": GITHUB_BASE + "m2.jpg", "icerik": M2_CONTENT},
         "m3": {"id": "m3", "yazar": "Marc-Alain Babi, MD, Neurocritical Care Specialist for Cleveland Clinic", "baslik": "Are Energy Drinks Bad for You?", "url": "health.clevelandclinic.org", "resim": GITHUB_BASE + "m3.jpg", "icerik": M3_CONTENT},
-        "m4": {"id": "m4", "yazar": "Energy Drinks Europe", "baslik": "Energy drinks myths", "url": "energydrinkseurope.org", "resim": GITHUB_BASE + "m4.jpg", "icerik": M4_CONTENT}
+        "m4": {"id": "m4", "yazar": "Energy Drinks Europe (Industry Association)", "baslik": "Energy Drinks Myths and Facts", "url": "energydrinkseurope.org", "resim": GITHUB_BASE + "m4.jpg", "icerik": M4_CONTENT}
     }
 
 # --- SORULAR ---
@@ -35,7 +35,7 @@ SORULAR = [
     "How well do you think the author supports his/her own claim?"
 ]
 
-# --- TASARIM ---
+# --- TASARIM (CSS) ---
 st.markdown("""
     <style>
     .browser-window { border: 1px solid #d1d1d1; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow: hidden; background: #ffffff; margin-bottom: 25px; }
@@ -57,12 +57,12 @@ if 'timers' not in st.session_state: st.session_state.timers = {"m1": 0, "m2": 0
 
 conn = st.connection("gsheets", type=GSheetsConnection)
 
-# --- EKRAN 1: GİRİŞ ---
+# --- EKRAN 1: GİRİŞ (BAŞLIK GÜNCELLENDİ) ---
 if st.session_state.step == "GIRIS":
-    st.title("Online Reading Panel")
+    st.title("Online Reading Activity") # "Academic Evaluation Panel" -> "Online Reading Activity"
     ad = st.text_input("Name and Surname:")
     sinif = st.text_input("Class / Group:")
-    if st.button("Start Evaluation"):
+    if st.button("Start Activity"):
         if ad and sinif:
             st.session_state.group_code = random.choice(["Grup_A", "Grup_B"])
             master = st.session_state.METINLER_MASTER
@@ -72,15 +72,14 @@ if st.session_state.step == "GIRIS":
                 st.session_state.active_metinler = [master["m2"], master["m1"], master["m4"], master["m3"]]
             st.session_state.user_name, st.session_state.user_class = ad, sinif
             st.session_state.step = "TEST"
-            st.session_state.text_start_time = time.time() # SAYAÇ BAŞLAT
+            st.session_state.text_start_time = time.time()
             st.rerun()
 
-# --- EKRAN 2: TEST ---
+# --- EKRAN 2: TEST SÜRECİ ---
 elif st.session_state.step == "TEST":
     idx = st.session_state.current_text
     m = st.session_state.active_metinler[idx]
     
-    # Süre ölçümü (Her interaction'da geçen süreyi session_state'e biriktirir)
     if 'text_start_time' not in st.session_state:
         st.session_state.text_start_time = time.time()
     
@@ -117,7 +116,6 @@ elif st.session_state.step == "TEST":
         with c1:
             if idx > 0:
                 if st.button("⬅️ Previous"):
-                    # SÜRE KAYDI
                     elapsed = time.time() - st.session_state.text_start_time
                     st.session_state.timers[m['id']] += elapsed
                     st.session_state.text_start_time = time.time()
@@ -130,7 +128,6 @@ elif st.session_state.step == "TEST":
             if idx < 3:
                 if st.button("Next ➔"):
                     if p1 and p2 and p3:
-                        # SÜRE KAYDI
                         elapsed = time.time() - st.session_state.text_start_time
                         st.session_state.timers[m['id']] += elapsed
                         st.session_state.text_start_time = time.time()
@@ -144,7 +141,6 @@ elif st.session_state.step == "TEST":
             else:
                 if st.button("✅ Complete and Save"):
                     if p1 and p2 and p3:
-                        # SON SÜRE KAYDI
                         elapsed = time.time() - st.session_state.text_start_time
                         st.session_state.timers[m['id']] += elapsed
                         
@@ -152,21 +148,13 @@ elif st.session_state.step == "TEST":
                         with st.spinner("Saving..."):
                             try:
                                 df = conn.read(worksheet="Sheet1", ttl=0)
-                                row = {
-                                    "timestamp": datetime.now().strftime("%d/%m/%Y %H:%M"),
-                                    "name": st.session_state.user_name,
-                                    "class": st.session_state.user_class,
-                                    "group": st.session_state.group_code
-                                }
-                                # Yanıtları ekle
+                                row = {"timestamp": datetime.now().strftime("%d/%m/%Y %H:%M"), "name": st.session_state.user_name, "class": st.session_state.user_class, "group": st.session_state.group_code}
                                 row.update(st.session_state.answers)
-                                # SÜRELERİ EKLE (Gizli Veri)
                                 for mid, duration in st.session_state.timers.items():
                                     row[f"{mid}_time_sec"] = round(duration, 2)
                                 
                                 vals = [v for k,v in st.session_state.answers.items() if "_s" in k]
                                 row["total_avg"] = round(sum(vals)/len(vals), 2)
-                                
                                 updated = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
                                 conn.update(worksheet="Sheet1", data=updated)
                                 st.session_state.step = "BITIS"
