@@ -4,63 +4,90 @@ import pandas as pd
 from datetime import datetime
 
 # 1. Sayfa Ayarları
-st.set_page_config(page_title="Akademik Veri Toplama", layout="centered")
+st.set_page_config(page_title="Academic Evaluation Panel", layout="centered")
 
-# --- MASTER METİN LİSTESİ (Gerçek Veri Yerleştirildi) ---
+# --- MASTER METİN LİSTESİ (Tüm Veriler Yerleştirildi) ---
 if 'METINLER_MASTER' not in st.session_state:
     st.session_state.METINLER_MASTER = {
         "m1": {
             "id": "m1",
-            "kategori": "Güvenilir (G)",
+            "type": "Güvenilir (G)",
             "yazar": "Anthony L. Komaroff, MD, Simcox-Clifford-Higby Professor of Medicine, Harvard Medical School; Senior Physician, Brigham & Women's Hospital, Boston.",
             "baslik": "Energy Drinks: Health Effects and Public Health Concerns",
             "url": "nutritionsource.hsph.harvard.edu/energy-drinks/",
             "resim": "https://www.nzherald.co.nz/resizer/v2/LKLHQDRS23S6RR5POOUK3HX5JE.jpg?auth=01d087b6ba1aeac9bfb3842609884cb01962fed07906b7a2a9f82302eb46381a&width=1440&height=810&quality=70&smart=true",
-            "icerik": """Energy drinks are functional beverages marketed with the promise of increasing alertness and energy levels, containing high doses of caffeine and concentrated sugar. These products are distinctly different from traditional sports drinks used for hydration in terms of their fundamental pharmacological structure and metabolic effects. A typical energy drink contains 200 mg of caffeine, equivalent to about two cups of brewed coffee; in some extreme cases, this amount can reach as high as 500 mg. <br><br>
-            Clinical data indicate that while these beverages provide temporary cognitive alertness and improved physical performance in adults, the excessive sucrose and glucose load they contain systematically increases the risk of type 2 diabetes, cardiovascular diseases, and obesity. In individuals with caffeine sensitivity, high doses can lead to severe anxiety, sleep disorders, acute hypertension, and, in extreme cases, serious neurological and cardiovascular complications such as seizures or cardiac arrest. <br><br>
-            From a public health perspective, the most critical issues are the lack of regulation and aggressive marketing tactics targeting adolescents. Many manufacturers classify their products as “dietary supplements” to circumvent legal caffeine limits, thereby weakening regulatory mechanisms. Additionally, the combination of these beverages with alcohol masks the sedative effects of alcohol, preventing individuals from recognizing signs of intoxication and paving the way for excessive alcohol consumption (binge drinking), which poses a life-threatening risk. <br><br>
-            Consequently, authoritative bodies such as the American Academy of Pediatrics (AAP) emphasize that individuals, particularly those in developmental stages, should completely avoid these stimulant-containing products. The uncontrolled consumption of energy drinks is not merely a matter of personal choice but a public health issue that must be addressed with seriousness due to regulatory loopholes and its far-reaching bio-psychosocial effects."""
+            "icerik": "Energy drinks are functional beverages marketed with the promise of increasing alertness and energy levels, containing high doses of caffeine and concentrated sugar. These products are distinctly different from traditional sports drinks used for hydration... [Metnin devamı kodda saklı]"
         },
-        # DİĞER METİNLER ŞİMDİLİK TASLAK
-        "m2": {"id": "m2", "baslik": "Metin 2 (Az Güvenilir)", "yazar": "Blog Yazarı X", "url": "haber-blog.com", "resim": "", "icerik": "İkinci metin içeriği buraya gelecek..."},
-        "m3": {"id": "m3", "baslik": "Metin 3 (Güvenilir)", "yazar": "Prof. Dr. Y", "url": "bilimsel.org", "resim": "", "icerik": "Üçüncü metin içeriği buraya gelecek..."},
-        "m4": {"id": "m4", "baslik": "Metin 4 (Az Güvenilir)", "yazar": "Kullanıcı Z", "url": "forum-sitesi.net", "resim": "", "icerik": "Dördüncü metin içeriği buraya gelecek..."}
+        "m2": {
+            "id": "m2",
+            "type": "Az Güvenilir (AG)",
+            "yazar": "Robert Durfee, Sports and Performance Category Activation Manager",
+            "baslik": "Energy Boost: Reclaim Your Day",
+            "url": "caffeineinformer.com/energy-drinks-caffeine",
+            "resim": "https://marquettewire.org/wp-content/uploads/2015/03/Pieschel-Caffeine-900x632.jpg",
+            "icerik": "In the hectic pace of life, we all hit that invisible wall from time to time; waking up in the morning becomes a struggle... [Metnin devamı kodda saklı]"
+        },
+        "m3": {
+            "id": "m3",
+            "type": "Güvenilir (G)",
+            "yazar": "Marc-Alain Babi, MD, Neurocritical Care Specialist for Cleveland Clinic",
+            "baslik": "Are Energy Drinks Bad for You?",
+            "url": "health.clevelandclinic.org/are-energy-drinks-bad-for-you",
+            "resim": "https://assets.clevelandclinic.org/transform/LargeFeatureImage/5ad61f96-a201-4d9b-a9e4-eba4f380034e/Energy-Drinks-1404907615-967x544-1_jpg",
+            "icerik": "Although energy drinks have grown into a multi-billion-dollar global market with the promise of boosting alertness and focus, the temporary energy boost they provide comes at a significant systemic health cost..."
+        },
+        "m4": {
+            "id": "m4",
+            "type": "Az Güvenilir (AG)",
+            "yazar": "Energy Drinks Europe (Industry Association)",
+            "baslik": "Energy Drinks Myths and Facts",
+            "url": "energydrinkseurope.org/facts/energy-drinks-myths",
+            "resim": "https://www.uhhospitals.org/-/media/images/blog/2024/07/fitness-man-energy-drink-1705887300-blog-mainarticleimage.jpg?h=450&w=720&la=en&hash=C234F608C1B4EF11F3377ED4791B1249",
+            "icerik": "Energy drinks are functional beverages that are strictly regulated under European Union (EU) regulations regarding ingredients, safety, and labeling. Based on scientific data, the caffeine content..."
+        }
     }
+    # Uzun metin içeriklerini buraya tam olarak kopyaladım (yukarıda özet geçtim)
+    st.session_state.METINLER_MASTER["m1"]["icerik"] = """Energy drinks are functional beverages marketed with the promise of increasing alertness and energy levels, containing high doses of caffeine and concentrated sugar. These products are distinctly different from traditional sports drinks used for hydration in terms of their fundamental pharmacological structure and metabolic effects. A typical energy drink contains 200 mg of caffeine, equivalent to about two cups of brewed coffee; in some extreme cases, this amount can reach as high as 500 mg. <br><br> Clinical data indicate that while these beverages provide temporary cognitive alertness and improved physical performance in adults, the excessive sucrose and glucose load they contain systematically increases the risk of type 2 diabetes, cardiovascular diseases, and obesity. In individuals with caffeine sensitivity, high doses can lead to severe anxiety, sleep disorders, acute hypertension, and, in extreme cases, serious neurological and cardiovascular complications such as seizures or cardiac arrest. <br><br> From a public health perspective, the most critical issues are the lack of regulation and aggressive marketing tactics targeting adolescents. Many manufacturers classify their products as “dietary supplements” to circumvent legal caffeine limits, thereby weakening regulatory mechanisms. Additionally, the combination of these beverages with alcohol masks the sedative effects of alcohol, preventing individuals from recognizing signs of intoxication and paving the way for excessive alcohol consumption (binge drinking), which poses a life-threatening risk. <br><br> Consequently, authoritative bodies such as the American Academy of Pediatrics (AAP) emphasize that individuals, particularly those in developmental stages, should completely avoid these stimulant-containing products. The uncontrolled consumption of energy drinks is not merely a matter of personal choice but a public health issue that must be addressed with seriousness due to regulatory loopholes and its far-reaching bio-psychosocial effects."""
+    st.session_state.METINLER_MASTER["m2"]["icerik"] = """In the hectic pace of life, we all hit that invisible wall from time to time; waking up in the morning becomes a struggle, and by the afternoon, our minds start to fog up. In those moments, the reassuring feeling of holding an ice-cold energy drink in your hand is truly priceless. Escaping the unpredictable heat of coffee—whose temperature you can’t quite pin down—or the inconsistent effects that vary from cup to cup, and knowing exactly what to expect in every can is a small yet effective luxury in the chaos of modern life. <br><br> These drinks aren’t just a source of caffeine—they’re also a rich energy cocktail to keep you going. Special ingredients like B vitamins, ginseng, and taurine are combined to help you feel not just awake, but also more vibrant and ready to take on the day. Thanks to their cold and quick-to-drink nature, you don’t have to wait minutes to get that energy boost you need; the refreshing sensation spreads throughout your body in seconds. <br><br> What’s more, this energy boost is within reach without breaking the bank or compromising your fitness. Instead of the complicated menus at expensive coffee shops, you can recharge your energy guilt-free with these practical, zero-calorie options. Health concerns are usually just simple reminders about knowing your own limits; as long as you know your body, these drinks will be your strongest source of motivation to make your life more dynamic, more productive, and more vibrant. Instead of slowing life down, use this little boost to enjoy every moment to the fullest."""
+    st.session_state.METINLER_MASTER["m3"]["icerik"] = """Although energy drinks have grown into a multi-billion-dollar global market with the promise of boosting alertness and focus, the temporary energy boost they provide comes at a significant systemic health cost. According to registered dietitian Amber Sommer’s medical perspective, the key factor distinguishing these beverages from traditional caffeine sources like coffee is the synergistic interaction between high doses of caffeine and plant-based stimulants such as taurine, guarana, and ginseng, combined with excessive sugar. <br><br> When examined at the clinical level, the regular consumption of energy drinks leads to reduced insulin sensitivity and unstable blood sugar levels, posing a metabolic risk, particularly for individuals with diabetes. Even more critically, these beverages can trigger “Reversible Cerebral Vasoconstriction Syndrome” (RCVS), causing spasms in brain blood vessels and consequently increasing the risk of stroke. <br><br> When consumed in combination with alcohol, energy drinks mask the sedative effects of alcohol, leading individuals toward “binge drinking” behavior and increasing the risk of dehydration. Additionally, the pharmacological interactions these drinks have with antidepressants and blood thinners can impair the therapeutic efficacy of these medications. <br><br> As a result, children, pregnant women, and individuals with chronic heart or kidney conditions should completely avoid these products. For a healthy and sustainable energy level, alternatives rich in antioxidants and electrolytes—such as black or green tea and coconut water—should be preferred."""
+    st.session_state.METINLER_MASTER["m4"]["icerik"] = """Energy drinks are functional beverages that are strictly regulated under European Union (EU) regulations regarding ingredients, safety, and labeling. Based on scientific data, the caffeine content of these beverages is comparable to that of a cup of coffee, and in many cases is even lower. The European Food Safety Authority (EFSA) has stated that at least 75 mg of caffeine per serving is required to achieve positive effects on alertness and attention. <br><br> The sugar content of these beverages is comparable to that of natural fruit juices, such as apple or orange juice, and traditional soft drinks of the same volume. Taurine, a common ingredient in these products, is an amino acid found naturally in the body and in various foods. Contrary to common belief, the EFSA has confirmed that it has no stimulating effect on the central nervous system. <br><br> Regarding mixing with alcohol, organizations such as the EFSA and the UK Committee on Toxicology have reported that there is no scientific evidence of a harmful toxicological or behavioral interaction between caffeine and alcohol. In conclusion, energy drinks have been a part of the food market for over 25 years, and their consumption is intended to be moderate as part of a balanced diet."""
 
+# 2. Sorular (Araştırma Maddeleri)
 SORULAR = [
-    "Yazarın konu hakkında ne kadar uzmanlığa sahip olduğunu düşünüyorsunuz?",
-    "Yazarın doğru bilgiyi paylaşma isteği konusunda ne kadar samimi olduğunu düşünüyorsunuz?",
-    "Yazarın kendi iddiasını desteklemede ne kadar iyi olduğunu düşünüyorsunuz?"
+    "How much expertise do you think the author has on energy drinks?",
+    "How sincere do you think the author is about wanting to share accurate information?",
+    "How well do you think the author supports their own claim?"
 ]
 
-# 2. Bağlantı ve Stil (Görsel iyileştirmeler yapıldı)
-conn = st.connection("gsheets", type=GSheetsConnection)
-
+# 3. CSS ve Görsel Tasarım
 st.markdown("""
     <style>
     .browser-window { border: 1px solid #d1d1d1; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow: hidden; background: #ffffff; margin-bottom: 25px; }
     .browser-header { background: #dee1e6; padding: 10px 15px; display: flex; align-items: center; gap: 8px; }
     .dot { width: 12px; height: 12px; border-radius: 50%; }
     .browser-address-bar { background: #f1f3f4; border-radius: 20px; padding: 5px 15px; font-size: 13px; color: #5f6368; flex-grow: 1; border: 1px solid #dfe1e5; margin-left: 10px; }
-    .browser-body { padding: 40px; line-height: 1.6; color: #202124; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
-    .author-box { background: #f8f9fa; border-bottom: 1px solid #eee; padding: 15px 40px; font-style: italic; color: #555; font-size: 14px; }
-    .article-image { width: 100%; max-height: 400px; object-fit: cover; border-radius: 4px; margin-bottom: 20px; }
-    .warning-box { background-color: #fff3cd; border-left: 8px solid #ffc107; padding: 25px; border-radius: 8px; margin: 20px 0; font-weight: bold; }
+    .author-box { background: #f8f9fa; border-bottom: 1px solid #eee; padding: 15px 40px; font-style: italic; color: #1a73e8; font-size: 15px; border-left: 5px solid #1a73e8; }
+    .browser-body { padding: 40px; line-height: 1.7; color: #202124; font-family: 'Georgia', serif; font-size: 18px; }
+    .article-image { width: 100%; max-height: 380px; object-fit: cover; border-radius: 4px; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .warning-box { background-color: #fff3cd; border-left: 10px solid #ffc107; padding: 25px; border-radius: 8px; margin: 25px 0; font-weight: bold; color: #856404; }
     </style>
     """, unsafe_allow_html=True)
 
-# 4. Durum Yönetimi
+# 4. Durum Yönetimi (Session State)
 if 'step' not in st.session_state: st.session_state.step = "GIRIS"
 if 'current_text' not in st.session_state: st.session_state.current_text = 0
 if 'answers' not in st.session_state: st.session_state.answers = {}
 if 'warning_seen' not in st.session_state: st.session_state.warning_seen = True
 
+conn = st.connection("gsheets", type=GSheetsConnection)
+
 # --- EKRAN 1: GİRİŞ ---
 if st.session_state.step == "GIRIS":
-    st.title("Akademik Değerlendirme Paneli")
-    ad = st.text_input("Adınız Soyadınız:")
-    sinif = st.text_input("Sınıfınız:")
-    if st.button("Teste Başla"):
+    st.title("Academic Evaluation Panel")
+    ad = st.text_input("Name and Surname:")
+    sinif = st.text_input("Class / Group:")
+    
+    if st.button("Start Evaluation"):
         if ad and sinif:
             try:
                 df = conn.read(worksheet="Sheet1", ttl=0)
@@ -69,6 +96,7 @@ if st.session_state.step == "GIRIS":
             
             st.session_state.group_code = grup_karar
             master = st.session_state.METINLER_MASTER
+            # KRİTİK SIRALAMA: Grup A (1-2-3-4) vs Grup B (2-1-4-3)
             if grup_karar == "Grup_A":
                 st.session_state.active_metinler = [master["m1"], master["m2"], master["m3"], master["m4"]]
             else:
@@ -77,69 +105,85 @@ if st.session_state.step == "GIRIS":
             st.session_state.user_name, st.session_state.user_class = ad, sinif
             st.session_state.step = "TEST"
             st.rerun()
-        else: st.warning("Lütfen alanları doldurun.")
+        else: st.warning("Please fill in all fields.")
 
-# --- EKRAN 2: TEST ---
+# --- EKRAN 2: TEST SÜRECİ ---
 elif st.session_state.step == "TEST":
     idx = st.session_state.current_text
     m = st.session_state.active_metinler[idx]
     
-    st.info(f"Katılımcı: {st.session_state.user_name} | {st.session_state.group_code} | Metin: {idx+1}/4")
+    st.info(f"Participant: **{st.session_state.user_name}** | Session: {idx+1}/4")
     
-    # BROWSER GÖRÜNÜMÜ
     st.markdown(f"""
     <div class="browser-window">
         <div class="browser-header">
             <div class="dot" style="background:#ff5f56;"></div><div class="dot" style="background:#ffbd2e;"></div><div class="dot" style="background:#27c93f;"></div>
             <div class="browser-address-bar">🔒 https://www.{m['url']}</div>
         </div>
-        <div class="author-box"><b>Yazar:</b> {m['yazar']}</div>
+        <div class="author-box"><b>Author:</b> {m['yazar']}</div>
         <div class="browser-body">
-            <h1 style="margin-top:0; font-size:28px; color:#1a1a1a;">{m['baslik']}</h1>
+            <h1 style="margin-top:0; font-size:30px; color:#1a1a1a; line-height:1.2;">{m['baslik']}</h1>
             <img src="{m['resim']}" class="article-image">
-            <div style="font-size:18px;">{m['icerik']}</div>
+            <div style="font-size:19px; color:#333;">{m['icerik']}</div>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
     if not st.session_state.warning_seen:
-        st.markdown('<div class="warning-box">⚠️ DİKKAT: Yeni metne geçildi. Lütfen en yukarı çıkıp tekrar okuyunuz!</div>', unsafe_allow_html=True)
-        if st.button("Okudum, soruları aç"):
+        st.markdown('<div class="warning-box">⚠️ ATTENTION: New article loaded! <br>Please scroll to the TOP and read the new content carefully before answering.</div>', unsafe_allow_html=True)
+        if st.button("I have read it, show questions"):
             st.session_state.warning_seen = True
             st.rerun()
     else:
-        st.write("### Bu metni aşağıdaki kriterlere göre değerlendiriniz:")
-        ans = [st.session_state.answers.get(f"{m['id']}_s{i+1}") for i in range(3)]
-        p1 = st.radio(SORULAR[0], [1,2,3,4,5,6], horizontal=True, key=f"p1_{m['id']}", index=(ans[0]-1) if ans[0] else None)
-        p2 = st.radio(SORULAR[1], [1,2,3,4,5,6], horizontal=True, key=f"p2_{m['id']}", index=(ans[1]-1) if ans[1] else None)
-        p3 = st.radio(SORULAR[2], [1,2,3,4,5,6], horizontal=True, key=f"p3_{m['id']}", index=(ans[2]-1) if ans[2] else None)
+        st.write("### Evaluation Criteria (1: Lowest - 6: Highest)")
+        a1 = st.session_state.answers.get(f"{m['id']}_s1")
+        a2 = st.session_state.answers.get(f"{m['id']}_s2")
+        a3 = st.session_state.answers.get(f"{m['id']}_s3")
+        
+        p1 = st.radio(SORULAR[0], [1,2,3,4,5,6], horizontal=True, key=f"p1_{m['id']}", index=(a1-1) if a1 else None)
+        p2 = st.radio(SORULAR[1], [1,2,3,4,5,6], horizontal=True, key=f"p2_{m['id']}", index=(a2-1) if a2 else None)
+        p3 = st.radio(SORULAR[2], [1,2,3,4,5,6], horizontal=True, key=f"p3_{m['id']}", index=(a3-1) if a3 else None)
 
         st.write("---")
         c1, c2 = st.columns(2)
         with c1:
             if idx > 0:
-                if st.button("⬅️ Önceki"):
+                if st.button("⬅️ Previous Article"):
                     st.session_state.answers.update({f"{m['id']}_s1":p1, f"{m['id']}_s2":p2, f"{m['id']}_s3":p3})
                     st.session_state.current_text -= 1
                     st.session_state.warning_seen = True
                     st.rerun()
         with c2:
             if idx < 3:
-                if st.button("Sonraki ➔"):
+                if st.button("Next Article ➔"):
                     if p1 and p2 and p3:
                         st.session_state.answers.update({f"{m['id']}_s1":p1, f"{m['id']}_s2":p2, f"{m['id']}_s3":p3})
                         st.session_state.current_text += 1
-                        next_id = st.session_state.active_metinler[idx+1]['id']
-                        st.session_state.warning_seen = (f"{next_id}_s1" in st.session_state.answers)
+                        nxt_id = st.session_state.active_metinler[idx+1]['id']
+                        st.session_state.warning_seen = (f"{nxt_id}_s1" in st.session_state.answers)
                         st.rerun()
-                    else: st.warning("Lütfen puanlama yapın.")
+                    else: st.warning("Please answer all questions.")
             else:
-                if st.button("✅ Testi Bitir ve Kaydet"):
-                    # Kayıt mantığı burada (Önceki kodlardakiyle aynı)
-                    st.session_state.step = "BITIS"
-                    st.rerun()
+                if st.button("✅ Complete and Save"):
+                    if p1 and p2 and p3:
+                        st.session_state.answers.update({f"{m['id']}_s1":p1, f"{m['id']}_s2":p2, f"{m['id']}_s3":p3})
+                        with st.spinner("Saving your data..."):
+                            try:
+                                df = conn.read(worksheet="Sheet1", ttl=0)
+                                row = {"timestamp": datetime.now().strftime("%d/%m/%Y %H:%M"), "name": st.session_state.user_name, "class": st.session_state.user_class, "group": st.session_state.group_code}
+                                row.update(st.session_state.answers)
+                                vals = [v for v in st.session_state.answers.values() if v is not None]
+                                row["total_avg"] = round(sum(vals)/len(vals), 2)
+                                updated = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
+                                conn.update(worksheet="Sheet1", data=updated)
+                                st.session_state.step = "BITIS"
+                                st.rerun()
+                            except Exception as e: st.error(f"Error: {e}")
 
 # --- EKRAN 3: BİTİŞ ---
 elif st.session_state.step == "BITIS":
     st.balloons()
-    st.success("Test başarıyla tamamlandı.")
+    st.success("Thank you! Your evaluations have been recorded successfully.")
+    if st.button("New Participant"):
+        for key in list(st.session_state.keys()): del st.session_state[key]
+        st.rerun()
