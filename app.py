@@ -112,7 +112,7 @@ elif st.session_state.step == "TEST":
         ans = [st.session_state.answers.get(f"{m['id']}_s{i+1}") for i in range(3)]
         p1 = st.radio(SORULAR[0], [1,2,3,4,5,6], horizontal=True, key=f"p1_{m['id']}", index=(ans[0]-1) if ans[0] else None)
         p2 = st.radio(SORULAR[1], [1,2,3,4,5,6], horizontal=True, key=f"p2_{m['id']}", index=(ans[1]-1) if ans[1] else None)
-        p3 = st.radio(SORULAR[2], [1,2,3,4,5,6], horizontal=True, key=f"p3_{m['id']}", index=(ans[2]-1) if ans[2.] else None)
+        p3 = st.radio(SORULAR[2], [1,2,3,4,5,6], horizontal=True, key=f"p3_{m['id']}", index=(ans[2]-1) if ans[2] else None)
 
         st.write("---")
         c1, c2 = st.columns(2)
