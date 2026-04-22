@@ -57,9 +57,9 @@ if 'timers' not in st.session_state: st.session_state.timers = {"m1": 0, "m2": 0
 
 conn = st.connection("gsheets", type=GSheetsConnection)
 
-# --- EKRAN 1: GİRİŞ (BAŞLIK GÜNCELLENDİ) ---
+# --- EKRAN 1: GİRİŞ ---
 if st.session_state.step == "GIRIS":
-    st.title("Online Reading Activity") # "Academic Evaluation Panel" -> "Online Reading Activity"
+    st.title("Online Reading Activity") 
     ad = st.text_input("Name and Surname:")
     sinif = st.text_input("Class / Group:")
     if st.button("Start Activity"):
@@ -147,19 +147,27 @@ elif st.session_state.step == "TEST":
                         st.session_state.answers.update({f"{m['id']}_s1":p1, f"{m['id']}_s2":p2, f"{m['id']}_s3":p3})
                         with st.spinner("Saving..."):
                             try:
-                                df = conn.read(worksheet="Sheet1", ttl=0)
-                                row = {"timestamp": datetime.now().strftime("%d/%m/%Y %H:%M"), "name": st.session_state.user_name, "class": st.session_state.user_class, "group": st.session_state.group_code}
+                                # --- GÜNCEL KAYIT MANTIĞI: APPEND (create) ---
+                                row = {
+                                    "timestamp": datetime.now().strftime("%d/%m/%Y %H:%M"), 
+                                    "name": st.session_state.user_name, 
+                                    "class": st.session_state.user_class, 
+                                    "group": st.session_state.group_code
+                                }
                                 row.update(st.session_state.answers)
                                 for mid, duration in st.session_state.timers.items():
                                     row[f"{mid}_time_sec"] = round(duration, 2)
                                 
                                 vals = [v for k,v in st.session_state.answers.items() if "_s" in k]
                                 row["total_avg"] = round(sum(vals)/len(vals), 2)
-                                updated = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
-                                conn.update(worksheet="Sheet1", data=updated)
+                                
+                                # Veriyi tek satırlık bir DataFrame yapıp doğrudan en sona ekliyoruz
+                                new_row_df = pd.DataFrame([row])
+                                conn.create(worksheet="Sheet1", data=new_row_df)
+                                
                                 st.session_state.step = "BITIS"
                                 st.rerun()
-                            except Exception as e: st.error(f"Error: {e}")
+                            except Exception as e: st.error(f"Error while saving: {e}")
 
 # --- EKRAN 3: BİTİŞ ---
 elif st.session_state.step == "BITIS":
