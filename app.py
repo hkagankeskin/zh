@@ -8,7 +8,7 @@ import time
 # 1. Sayfa Ayarları
 st.set_page_config(page_title="Online Reading Activity", layout="centered")
 
-# --- MASTER METİN İÇERİKLERİ (KESİNLİKLE DOKUNULMAMIŞ) ---
+# --- MASTER METİN İÇERİKLERİ (ORİJİNAL - KORUNMUŞ) ---
 M1_CONTENT = """Energy drinks are functional beverages marketed with the promise of increasing alertness and energy levels, containing high doses of caffeine and concentrated sugar. These products are distinctly different from traditional sports drinks used for hydration in terms of their fundamental pharmacological structure and metabolic effects. A typical energy drink contains 200 mg of caffeine, equivalent to about two cups of brewed coffee; in some extreme cases, this amount can reach as high as 500 mg. <br><br> Clinical data indicate that while these beverages provide temporary cognitive alertness and improved physical performance in adults, the excessive sucrose and glucose load they contain systematically increases the risk of type 2 diabetes, cardiovascular diseases, and obesity. In individuals with caffeine sensitivity, high doses can lead to severe anxiety, sleep disorders, acute hypertension, and, in extreme cases, serious neurological and cardiovascular complications such as seizures or cardiac arrest. <br><br> From a public health perspective, the most critical issues are the lack of regulation and aggressive marketing tactics targeting adolescents. Many manufacturers classify their products as “dietary supplements” to circumvent legal caffeine limits, thereby weakening regulatory mechanisms. Additionally, the combination of these beverages with alcohol masks the sedative effects of alcohol, preventing individuals from recognizing signs of intoxication and paving the way for excessive alcohol consumption (binge drinking), which poses a life-threatening risk. <br><br> Consequently, authoritative bodies such as the American Academy of Pediatrics (AAP) emphasize that individuals, particularly those in developmental stages, should completely avoid these stimulant-containing products. The uncontrolled consumption of energy drinks is not merely a matter of personal choice but a public health issue that must be addressed with seriousness due to regulatory loopholes and its far-reaching bio-psychosocial effects."""
 
 M2_CONTENT = """In the hectic pace of life, we all hit that invisible wall from time to time; waking up in the morning becomes a struggle, and by the afternoon, our minds start to fog up. In those moments, the reassuring feeling of holding an ice-cold energy drink in your hand is truly priceless. Escaping the unpredictable heat of coffee—whose temperature you can’t quite pin down—or the inconsistent effects that vary from cup to cup, and knowing exactly what to expect in every can is a small yet effective luxury in the chaos of modern life. That refreshing fizz you hear when you open a can is actually the first sign that you’re about to reclaim your day. <br><br> These drinks aren’t just a source of caffeine—they’re also a rich energy cocktail to keep you going. Special ingredients like B vitamins, ginseng, and taurine are combined to help you feel not just awake, but also more vibrant and ready to take on the day. Thanks to their cold and quick-to-drink nature, you don’t have to wait minutes to get that energy boost you need; the refreshing sensation spreads throughout your body in seconds. Especially after a tough workout, rewarding your tired muscles with that light and delicious drink turns the recovery process into a pleasant ritual. <br><br> What’s more, this energy boost is within reach without breaking the bank or compromising your fitness. Instead of the complicated menus at expensive coffee shops, you can recharge your energy guilt-free with these practical, zero-calorie options. Health concerns are usually just simple reminders about knowing your own limits; as long as you know your body, these drinks will be your strongest source of motivation to make your life more dynamic, more productive, and more vibrant. Instead of slowing life down, use this little boost to enjoy every moment to the fullest."""
@@ -119,7 +119,6 @@ elif st.session_state.step == "TEST":
                     elapsed = time.time() - st.session_state.text_start_time
                     st.session_state.timers[m['id']] += elapsed
                     st.session_state.text_start_time = time.time()
-                    
                     st.session_state.answers.update({f"{m['id']}_s1":p1, f"{m['id']}_s2":p2, f"{m['id']}_s3":p3})
                     st.session_state.current_text -= 1
                     st.session_state.warning_seen = True
@@ -131,7 +130,6 @@ elif st.session_state.step == "TEST":
                         elapsed = time.time() - st.session_state.text_start_time
                         st.session_state.timers[m['id']] += elapsed
                         st.session_state.text_start_time = time.time()
-                        
                         st.session_state.answers.update({f"{m['id']}_s1":p1, f"{m['id']}_s2":p2, f"{m['id']}_s3":p3})
                         st.session_state.current_text += 1
                         nxt_id = st.session_state.active_metinler[idx+1]['id']
@@ -143,31 +141,40 @@ elif st.session_state.step == "TEST":
                     if p1 and p2 and p3:
                         elapsed = time.time() - st.session_state.text_start_time
                         st.session_state.timers[m['id']] += elapsed
-                        
                         st.session_state.answers.update({f"{m['id']}_s1":p1, f"{m['id']}_s2":p2, f"{m['id']}_s3":p3})
-                        with st.spinner("Saving..."):
-                            try:
-                                # --- GÜNCEL KAYIT MANTIĞI: APPEND (create) ---
-                                row = {
-                                    "timestamp": datetime.now().strftime("%d/%m/%Y %H:%M"), 
-                                    "name": st.session_state.user_name, 
-                                    "class": st.session_state.user_class, 
-                                    "group": st.session_state.group_code
-                                }
-                                row.update(st.session_state.answers)
-                                for mid, duration in st.session_state.timers.items():
-                                    row[f"{mid}_time_sec"] = round(duration, 2)
-                                
-                                vals = [v for k,v in st.session_state.answers.items() if "_s" in k]
-                                row["total_avg"] = round(sum(vals)/len(vals), 2)
-                                
-                                # Veriyi tek satırlık bir DataFrame yapıp doğrudan en sona ekliyoruz
-                                new_row_df = pd.DataFrame([row])
-                                conn.create(worksheet="Sheet1", data=new_row_df)
-                                
+                        
+                        with st.spinner("Saving data safely, please wait..."):
+                            success = False
+                            # --- ULTRA GÜVENLİ RETRY LOGIC ---
+                            for attempt in range(3):
+                                try:
+                                    time.sleep(random.uniform(1, 3)) # Rastgele bekleme (Çakışmayı önler)
+                                    current_df = conn.read(worksheet="Sheet1", ttl=0)
+                                    
+                                    row = {
+                                        "timestamp": datetime.now().strftime("%d/%m/%Y %H:%M"), 
+                                        "name": st.session_state.user_name, 
+                                        "class": st.session_state.user_class, 
+                                        "group": st.session_state.group_code
+                                    }
+                                    row.update(st.session_state.answers)
+                                    for mid, duration in st.session_state.timers.items():
+                                        row[f"{mid}_time_sec"] = round(duration, 2)
+                                    
+                                    vals = [v for k,v in st.session_state.answers.items() if "_s" in k]
+                                    row["total_avg"] = round(sum(vals)/len(vals), 2)
+                                    
+                                    updated_df = pd.concat([current_df, pd.DataFrame([row])], ignore_index=True)
+                                    conn.update(worksheet="Sheet1", data=updated_df)
+                                    success = True
+                                    break # Başarılıysa döngüden çık
+                                except Exception as e:
+                                    if attempt < 2: continue # Tekrar dene
+                                    else: st.error(f"Save failed! Don't close this window. Error: {e}")
+
+                            if success:
                                 st.session_state.step = "BITIS"
                                 st.rerun()
-                            except Exception as e: st.error(f"Error while saving: {e}")
 
 # --- EKRAN 3: BİTİŞ ---
 elif st.session_state.step == "BITIS":
