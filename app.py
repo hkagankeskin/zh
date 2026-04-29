@@ -162,7 +162,8 @@ elif st.session_state.step == "TEST":
                                 row_data["total_avg"] = round(sum(vals)/len(vals), 2)
                                 
                                 # 2. ATOMİK EKLEME (APPEND) - Mükerrerliği ve silinmeyi önler
-                                client = conn._instance.client
+                                # DÜZELTME: Gizli nesne erişimi '_client' olarak güncellendi.
+                                client = conn._instance._client
                                 sheet = client.open_by_url(st.secrets["connections"]["gsheets"]["spreadsheet"])
                                 worksheet = sheet.worksheet("Sheet1")
                                 
